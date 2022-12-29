@@ -28,7 +28,8 @@ def fetch(session: requests.Session, page: int = 1) -> Iterator[list]:
 
 
 def main(argv: Sequence[str] = sys.argv[1:]) -> None:
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(stream=sys.stdout)
+    logger.setLevel(logging.DEBUG)
     p = argparse.ArgumentParser()
     p.add_argument(
         '-o',
@@ -45,7 +46,8 @@ def main(argv: Sequence[str] = sys.argv[1:]) -> None:
             'X-Requested-With': 'XMLHttpRequest',
         }
     )
-    w = csv.writer(args.output)
+    # csv.reader(fp, skipinitialspace=True, doublequote=False)
+    w = csv.writer(args.output, quoting=csv.QUOTE_ALL)
     page = 1
     num_rows = 0
     while True:
