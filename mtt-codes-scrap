@@ -13,7 +13,7 @@ import argparse
 import csv
 import logging
 import sys
-from typing import Iterator, Sequence
+from typing import Iterator, Optional, Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ def fetch(session: requests.Session, page: int = 1) -> Iterator[list]:
         yield [td.text.strip() for td in tr.find_all('td')]
 
 
-def main(argv: Sequence[str] = sys.argv[1:]) -> None:
+def main(argv: Sequence[str] = sys.argv[1:]) -> Optional[int]:
     logging.basicConfig(stream=sys.stdout)
     logger.setLevel(logging.DEBUG)
     p = argparse.ArgumentParser()
@@ -46,7 +46,6 @@ def main(argv: Sequence[str] = sys.argv[1:]) -> None:
             'X-Requested-With': 'XMLHttpRequest',
         }
     )
-    # csv.reader(fp, skipinitialspace=True, doublequote=False)
     w = csv.writer(args.output, quoting=csv.QUOTE_ALL)
     page = 1
     num_rows = 0
@@ -61,4 +60,4 @@ def main(argv: Sequence[str] = sys.argv[1:]) -> None:
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
